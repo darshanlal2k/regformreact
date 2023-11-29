@@ -15,8 +15,8 @@ export default function Regform() {
                     console.log(data);
                 }
             )}>
-                <Box display={"flex"} flexDirection={"column"} maxWidth={400}
-                    alignItems={"center"} justifyContent={"center"} margin={"auto"}
+                <Box display={"flex"} flexDirection={"column"} justifyContent={"center"} maxWidth={400}
+                    alignItems={"center"} margin={"auto"}
                     marginTop={1} marginBottom={2} borderRadius={3}
                     boxShadow={"5px 5px 10px #ccc"}
                     sx={{
@@ -28,51 +28,52 @@ export default function Regform() {
                     <Stack marginBottom={5}>
                         <TextField {...register('name', {
                             required: 'name is required',
+                            pattern: {
+                                value: /^[A-Za-z]+$/,
+                                message: 'Only alphabetic characters are allowed',
+                            },
                             minLength: {
                                 value: 3,
-                                message: 'name should atleast minimum 3 characters',
+                                message: 'minimum 3 characters',
                             },
                             maxLength: {
                                 value: 10,
-                                message: 'name should maximum 25 characters'
+                                message: 'maximum 25 characters'
                             },
                         })}
-                            // helperText={errors.name && errors.name.message}
-                            // error={Boolean(errors.message)}
                             margin="normal"
                             placeholder="name"
                             type="text"
                             variant="outlined"
-                            
                             label="name"
                         />
-                         {errors?.name && <p style={{ color: 'red' }}>{errors.name.message}</p>} 
+                        {errors?.name && <p style={{ color: 'red' }}>{errors.name.message}</p>}
                         <TextField {...register('email', { required: 'email is required' })}
                             margin="normal"
                             placeholder="email"
                             type="email"
                             variant="outlined"
-                            
+
                             label="email" />
                         <TextField {...register('company name', { required: true })}
                             margin="normal"
                             placeholder="company name"
                             type="text"
                             variant="outlined"
-                            
+
                             label="company name" />
                         <TextField {...register('contact', { required: true })}
                             margin="normal"
                             placeholder="contact"
                             type="text"
                             variant="outlined"
-                            
+
                             label="contact" />
                         <TextareaAutosize {...register('comments', { required: true })}
                             type="string"
                             minRows={3}
                             placeholder="comments"
-                    
+
                             ariant="outlined"
                             label="comments"
                             sx={{
