@@ -1,45 +1,67 @@
 import { Box, Typography, TextField, Button, Stack } from "@mui/material";
-import React, { useState, useEffect } from "react";
+ import React, { useState, useEffect } from "react";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { useForm } from "react-hook-form";
-import Select from 'react-select';
-import { Country, State } from 'country-state-city';
+// import Select from 'react-select';
+// import { Country, State } from 'country-state-city';
+import axios from "axios";
+//import React from "react";
 
 export default function Regform() {
+    // const url = "https://jsonplaceholder.typicode.com/users";
     const { register, handleSubmit, formState: { errors } } = useForm();
+    const [data, setData] = useState([]);
 
-    const [countries, setCountries] = useState([]);
-    const [selectedCountry, setSelectedCountry] = useState('');
-    const [states, setStates] = useState([]);
+    // const [countries, setCountries] = useState([]);
+    // const [selectedCountry, setSelectedCountry] = useState('');
+    // const [states, setStates] = useState([]);
+    // const [selectedState, setSelectedState] = useState('');
 
-    useEffect(() => {
-        const fetchCountries = async () => {
-            const fetchedCountries = Country.getAllCountries().map(country => ({
-                value: country.isoCode,
-                label: country.name
-            }));
-            setCountries(fetchedCountries);
-        };
-        fetchCountries();
-    }, []);
+    // useEffect(() => {
+    //     const fetchCountries = async () => {
+    //         const fetchedCountries = Country.getAllCountries().map(country => ({
+    //             value: country.isoCode,
+    //             label: country.name
+    //         }));
+    //         setCountries(fetchedCountries);
+    //     };
+    //     fetchCountries();
+    // }, []);
 
-    useEffect(() => {
-        if (selectedCountry !== '') {
-            const fetchedStates = State.getStatesOfCountry(selectedCountry).map(state => ({
-                value: state.id,
-                label: state.name
-            }));
-            setStates(fetchedStates);
-        }
-    }, [selectedCountry]);
+    // useEffect(() => {
+    //     if (selectedCountry !== '') {
+    //         const fetchedStates = State.getStatesOfCountry(selectedCountry).map(state => ({
+    //             value: state.id,
+    //             label: state.name
+    //         }));
+    //         setStates(fetchedStates);
+    //     }
+    // }, [selectedCountry]);
 
-    const handleCountryChange = (selectedOption) => {
-        setSelectedCountry(selectedOption.value);
+    // const handleCountryChange = (selectedOption) => {
+    //     setSelectedCountry(selectedOption.value);
+    // };
+    // const handleStateChange = (selectedOption) => {
+    //     setSelectedState(selectedOption.value);
+    // }
+    const onSubmit = () => {
+        // console.log(data);
+        axios.get('http://localhost:5000').then((res) => {
+            console.log(data);
+            setData(res.data);
+        });
+        // if (response.status === 200) {
+        //     // Handle successful submission
+        //     console.log('Data sent successfully');
+        // } else {
+        //     // Handle other responses
+        //     console.error('Failed to send data');
+        // }
     };
+    useEffect(() => {
+        onSubmit();
+      }, []);
 
-    const onSubmit = (data) => {
-        console.log(data);
-    };
     return (
         <div>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -123,28 +145,26 @@ export default function Regform() {
                                 message: 'Address should not exceed 200 characters'
                             },
                         })}
-                            minRows={4}
-                            maxRows={8}
-
+                            minRows={4} maxRows={8} placeholder="Type your address here..." variant="outlined" label="address"
                             style={{ width: '100%', margin: '10px 0', padding: '0px', borderRadius: '4px', borderColor: 'rgba(0, 0, 0, 0.23)', outline: 'none' }}
-
-                            placeholder="Type your address here..."
-                            variant="outlined"
-                            label="address"
                         >
                         </TextareaAutosize>
                         {errors?.address && <p style={{ color: 'red' }}>{errors.address.message}</p>}
-                        <Select
-                            {...register('country')}
+                        {/* <Select
+                            {...register('country', {
+                                required: 'country is required'
+                            })}
                             options={countries}
                             onChange={handleCountryChange}
                             placeholder="Select Country"
-                        />
-                        <Select
+                        /> */}
+                        {/* {errors?.country && <p style={{ color: 'red' }}>{errors.country.message}</p>} */}
+                        {/* <Select
                             {...register('state')}
                             options={states}
+                            onChange={handleStateChange}
                             placeholder="Select State"
-                        />
+                        /> */}
                         <Button variant="contained" sx={{ marginTop: 2 }} type="submit" >Submit</Button>
                     </Stack>
                 </Box>
