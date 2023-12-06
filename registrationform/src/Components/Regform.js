@@ -1,5 +1,5 @@
 import { Box, Typography, TextField, Button, Stack } from "@mui/material";
- import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { useForm } from "react-hook-form";
 // import Select from 'react-select';
@@ -10,7 +10,7 @@ import axios from "axios";
 export default function Regform() {
     // const url = "https://jsonplaceholder.typicode.com/users";
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const [data, setData] = useState([]);
+    // const [data, setData] = useState([]);
 
     // const [countries, setCountries] = useState([]);
     // const [selectedCountry, setSelectedCountry] = useState('');
@@ -47,8 +47,11 @@ export default function Regform() {
     const onSubmit = () => {
         // console.log(data);
         axios.get('http://localhost:5000').then((res) => {
-            console.log(data);
-            setData(res.data);
+            console.log(res);
+            console.log(res.data);
+            console.log(res.data[0]);
+            console.log(res.data[0].name);
+             
         });
         // if (response.status === 200) {
         //     // Handle successful submission
@@ -60,7 +63,7 @@ export default function Regform() {
     };
     useEffect(() => {
         onSubmit();
-      }, []);
+    }, []);
 
     return (
         <div>
