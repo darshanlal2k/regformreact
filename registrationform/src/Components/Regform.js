@@ -8,8 +8,7 @@ import axios from "axios";
 //import React from "react";
 
 export default function Regform() {
-    // const url = "https://jsonplaceholder.typicode.com/users";
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [data, setData] = useState([]);
 
     // const [countries, setCountries] = useState([]);
@@ -44,27 +43,33 @@ export default function Regform() {
     // const handleStateChange = (selectedOption) => {
     //     setSelectedState(selectedOption.value);
     // }
-    const onSubmit = (data) => {
-        console.log(data);
-        axios.get('http://localhost:5000/api').then((res) => {
-            // console.log(res);
-            console.log(res.data);
-            setData(res.data);
-            // console.log(setData(res.data.id));
-            // console.log(res.data[0]);
-            // console.log(res.data[0].name);
+    const onSubmit = async (formData) => {
+        try {
+            const response = await axios.post('http://localhost:5000/api', formData);
+            console.log(response.data);
+            setData(response.data);
+            reset();
+        }
+        catch (error) {
+            console.error('Error:', error);
+        }
+        // console.log(data);
+        // axios.get('http://localhost:5000/api').then((res) => {
+        //     // console.log(res);
+        //     console.log(res.data);
+        //     setData(res.data);
 
-        })
+        // })
 
-        axios.post('http://localhost:5000/api',{data:data}).then((res) => {
-            console.log(res);
-            console.log(res.data);
-            setData(res.data);
-            // console.log(setData(res.data.id));
-            console.log(res.data[0]);
-            console.log(res.data[0].name);
+        // axios.post('http://localhost:5000/api', { data: data }).then((res) => {
+        //     console.log(res);
+        //     console.log(res.data);
+        //     setData(res.data);
+        //     // console.log(setData(res.data.id));
+        //     console.log(res.data[0]);
+        //     console.log(res.data[0].name);
 
-        });
+        // });
         // if (response.status === 200) {
         //     // Handle successful submission
         //     console.log('Data sent successfully');
@@ -74,7 +79,17 @@ export default function Regform() {
         // }
     };
     useEffect(() => {
-        onSubmit();
+        // onSubmit();
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api');
+                setData(response.data);
+            }
+            catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        fetchData();
     }, []);
 
     // data.map((data, index) => {
@@ -201,6 +216,7 @@ export default function Regform() {
                         <th>Contact</th>
                         <th>Country Name</th>
                         <th>State Name</th>
+                        <th>Address</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -213,6 +229,7 @@ export default function Regform() {
                             <td>{item.contact}</td>
                             <td>{item.countryname}</td>
                             <td>{item.statename}</td>
+                            <td>{item.address}</td>
                         </tr>
                     ))}
                 </tbody>
