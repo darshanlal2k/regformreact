@@ -10,7 +10,7 @@ import axios from "axios";
 export default function Regform() {
     // const url = "https://jsonplaceholder.typicode.com/users";
     const { register, handleSubmit, formState: { errors } } = useForm();
-    // const [data, setData] = useState([]);
+    const [data, setData] = useState([]);
 
     // const [countries, setCountries] = useState([]);
     // const [selectedCountry, setSelectedCountry] = useState('');
@@ -44,14 +44,26 @@ export default function Regform() {
     // const handleStateChange = (selectedOption) => {
     //     setSelectedState(selectedOption.value);
     // }
-    const onSubmit = () => {
-        // console.log(data);
-        axios.get('http://localhost:5000').then((res) => {
+    const onSubmit = (data) => {
+        console.log(data);
+        axios.get('http://localhost:5000/api').then((res) => {
+            // console.log(res);
+            console.log(res.data);
+            setData(res.data);
+            // console.log(setData(res.data.id));
+            // console.log(res.data[0]);
+            // console.log(res.data[0].name);
+
+        })
+
+        axios.post('http://localhost:5000/api',{data:data}).then((res) => {
             console.log(res);
             console.log(res.data);
+            setData(res.data);
+            // console.log(setData(res.data.id));
             console.log(res.data[0]);
             console.log(res.data[0].name);
-             
+
         });
         // if (response.status === 200) {
         //     // Handle successful submission
@@ -65,8 +77,15 @@ export default function Regform() {
         onSubmit();
     }, []);
 
+    // data.map((data, index) => {
+
+    // })
     return (
         <div>
+            {/* {data.map((data, index) => {
+                <h1>{data[0].id}</h1>
+            })} */}
+            {/* <p>{data}a</p> */}
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Box display={"flex"} flexDirection={"column"} justifyContent={"center"} maxWidth={400}
                     alignItems={"center"} margin={"auto"}
@@ -172,6 +191,32 @@ export default function Regform() {
                     </Stack>
                 </Box>
             </form>
+            <table className='table table-striped'>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>company Name</th>
+                        <th>Contact</th>
+                        <th>Country Name</th>
+                        <th>State Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {data.map(item => (
+                        <tr className="" key={item.id}>
+                            <td>{item.id}</td>
+                            <td>{item.name}</td>
+                            <td>{item.email}</td>
+                            <td>{item.companyname}</td>
+                            <td>{item.contact}</td>
+                            <td>{item.countryname}</td>
+                            <td>{item.statename}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 }
